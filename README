@@ -1,0 +1,59 @@
+" README SUMMARY" - Seawater Intrusion Model"
+
+Projetc Purpose: 
+This project implements a lumped parameter model to simulate and forecast pressure and salinity dynamics in coastal aquifers. This LPM is calibrated with historical data and can be used to evaluate different pumping scenarios for water resource management planning.
+
+Key Features:
+1. Solves ODEs numerically with the Backward Euler method
+2. Calibrates parameters using curve fitting
+3. Generates ensemble predictions via uncertainty quantification
+4. Simulates future conditions under 4 pumping scenarios  (increase, decrease, constant, stopped)
+
+How to Run: 
+Python version: 3.10 + 
+Python " Main V3 (Calibration - Samples).py "
+Required packages:  numpy
+                    scipy
+                    matplotlib
+
+Input Files:
+1. " si_pres.txt "  Observed pressure data
+2. " si_salt.txt "  Observed salinity data
+3. " si_mass.txt "  historical pumping data
+4. " forecast_q.csv "  pumping scenarios for future forecasting  
+
+Outputs: 
+1. Analytical and Numerical plots for pressure and salinity
+2. Calibrated pressure and salinity plots
+3. Parameter uncertainty Visualization
+4. Four " What-if " pumping rate scenarios plots from 1960 to 2025
+
+Function Descriptions: 
+main()           Runs the full modeling workflow: calibration, sampling, ensemble simulations, and forecasting
+main_cali()      Calibrates the model parameters for pressure and salinity using curve_fit().
+
+" BENCHMARKING " 
+p_heun_method()  Solves pressure ODE using Heun's Method with a constant pumping rate q0 (Imporved Euler Method) and return ts, ps
+p_analytical()   Computes the analytical solution for pressure as a benchmark, return pa
+x_heun_method()  Solves salt mass ODE using Heun's Method ((Imporved Euler Method)) and return ts, xs
+x_analytical()   Computes the analytical solution for salinity as a benchmark, return xa
+unit_tests( )    Verify the correctness of numerical solutions
+
+" CALIBRATION " 
+model_for_curve_fit()       A wrapper function used for pressure LPM calibration 
+model_for_curve_fit_salt()  A wrapper function used for salinity LPM calibration 
+solve_lpm()                 Solves pressure ODE using Heun's Method with a time-varying pumping rate q(t)    
+solve_lpm_salt()            Solves salinity ODE using Heun's Method with a time-varying pumping rate q(t)
+fit_mvm()                   Estimate the mean and covariance matrix value 
+get_familiar_with_model()   Computes pressure and salinity misfits for comparsion with observed data
+
+" Uncertainty " 
+grid_search()         Perfornms a brute-force search across parameter combinations (a,b_alps, b_ocean) to generate a posterior probability  distribution (P)
+construct_samples()   Construct samples from a multivariate normal distribution fitted to the posterior
+model_ensemble()      Runs ensemble pressure simulations across sampled parameters
+model_ensemble_salt() Runs ensemble salinity simulations across sampled parameters
+model_forecast()      Forecasts pressure and salinity under different pumping rate acenarios for the next 30 years
+
+" Plotting "
+plot_posterior()      Visualizes the posterior parameter space (2D or 3D)
+plot_samples()        Plots the locations of sampled parameters in the posterior space
